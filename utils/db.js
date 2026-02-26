@@ -1,6 +1,6 @@
 // Connect to database
 import Sequelize from 'sequelize';
-import { loadModels } from '../models';
+import { loadModels } from '../models/index.js';
 const sequelize = new Sequelize('mysql://root:qwerty@localhost:3306/web_shop');
 
 // Test database connection
