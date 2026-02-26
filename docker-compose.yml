@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container-sequelize
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty
+      # uncomment below if you want to automatically create and select a database
+      MYSQL_DATABASE: web_shop
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-sequelize-data:/var/lib/mysql
+      # uncomment if you want to automatically create and select a database
+      # - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro 
+
+volumes:
+  mysql-sequelize-data:

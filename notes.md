@@ -1,0 +1,1 @@
+docker exec -it mysql-container-sequelize mysql -u root -p
