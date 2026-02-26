@@ -44,6 +44,7 @@ User.associate = function (models) {
     // Define associations here if needed, e.g.:
     // User.hasMany(models.Order, { foreignKey: 'userId' });
     User.hasMany(models.Product, { foreignKey: 'userId' }); // Assuming a user can have many products
+    User.hasOne(models.Cart, { foreignKey: 'userId' }); // Assuming a user has one cart
 };
 
 export default User;

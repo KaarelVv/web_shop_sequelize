@@ -49,7 +49,10 @@ const Product = sequelize.define('Product', {
 Product.associate = function (models) {
     // Define associations here if needed, e.g.:
     // Product.belongsTo(models.User, { foreignKey: 'userId' });
-    Product.belongsTo(models.User, { foreignKey: 'userId' }); 
+    Product.belongsTo(models.User, { foreignKey: 'userId' }); // Assuming a product belongs to one user
+    Product.belongsToMany(models.Cart, {
+        through: models.CartItem, foreignKey: 'productId'
+    }); // Assuming a product can be in many carts through CartItem
 }
 
 export default Product;

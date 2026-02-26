@@ -4,7 +4,7 @@ async function startServer(app, port) {
     try {
         await connectToDatabase();
         await sequelize
-        .sync({ }); // Synchronize models with the database ->
+        .sync({ force: true }); // Synchronize models with the database ->
         //  force: true will drop tables if they exist and recreate them
         //  alter: true will update tables if they exist but have different schema
         //  In production, you should use migrations instead of sync to manage your database schema
