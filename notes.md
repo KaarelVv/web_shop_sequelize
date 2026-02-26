@@ -16,5 +16,3 @@ PUT http://localhost:3000/admin/product/:id
 DELETE http://localhost:3000/admin/product/:id
 If you want the edit-only rule, you’d call:
 PUT http://localhost:3000/admin/product/:id?edit=true
-
-Say the word if you want me to add/edit the middleware for that check.

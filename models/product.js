@@ -21,10 +21,35 @@ const Product = sequelize.define('Product', {
     description: {
         type: Sequelize.TEXT,
         allowNull: false
+    },
+    createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW
+    },
+    userId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'users', // Name of the User table
+            key: 'id'
+        },
+        onDelete: 'CASCADE' // If a user is deleted, their products will be deleted as well
     }
 },
     {
         tableName: 'products'
     });
+
+Product.associate = function (models) {
+    // Define associations here if needed, e.g.:
+    // Product.belongsTo(models.User, { foreignKey: 'userId' });
+    Product.belongsTo(models.User, { foreignKey: 'userId' }); 
+}
 
 export default Product;

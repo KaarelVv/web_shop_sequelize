@@ -8,7 +8,8 @@ class AdminProductController {
                 title: req.body.title,
                 price: req.body.price,
                 imageUrl: req.body.imageUrl,
-                description: req.body.description
+                description: req.body.description,
+                userId: req.body.userId // Assuming the user ID is sent in the request body; in a real app, you'd get this from the authenticated user session
             });
             res.status(201).json({
                  message: 'Product created successfully', 
@@ -59,8 +60,8 @@ class AdminProductController {
                 title: req.body.title || product.title, // Keep existing title if not provided
                 price: req.body.price || product.price, // Keep existing price if not provided
                 imageUrl: req.body.imageUrl || product.imageUrl, // Keep existing imageUrl if not provided
-                description: req.body.description || product.description // Keep existing description if not provided
-            });
+                description: req.body.description || product.description, // Keep existing description if not provided
+                });
             console.log('update body:', req.body);
             res.status(200).json({ message: 'Product updated successfully' });
         } catch (err) {

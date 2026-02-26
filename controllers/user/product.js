@@ -26,8 +26,7 @@ class ProductController {
             res.status(500).json({ message: 'Failed to fetch product' });
         }
     }
-
-    //
+    
 }
 
 export default new ProductController();

@@ -1,6 +1,8 @@
 import express from 'express';
 import productAdminRoutes from './routes/admin/products.js';
 import productRoutes from './routes/user/products.js';
+import userRoutes from './routes/user.js';
+
 const app = express();
 
 app.use(express.json());
@@ -16,5 +18,7 @@ app.use('/admin', productAdminRoutes);
 // User routes
 app.use('/', productRoutes);
 
+// User management routes
+app.use('/users', userRoutes);
 
 export default app;
