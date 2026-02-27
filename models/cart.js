@@ -8,7 +8,10 @@ const Cart = sequelize.define('Cart', {
         autoIncrement: true,
         allowNull: false
     },
-});
+},
+    {
+        tableName: 'carts'
+    });
 Cart.associate = function (models) {
     Cart.belongsTo(models.User, {
         foreignKey: 'userId'

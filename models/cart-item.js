@@ -11,6 +11,9 @@ const CartItem = sequelize.define('CartItem', {
     quantity: {
         type: Sequelize.INTEGER,
     },
-});
+},
+    {
+        tableName: 'cart_items'
+    });
 
 export default CartItem;
