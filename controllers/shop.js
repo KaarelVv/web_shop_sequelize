@@ -1,5 +1,6 @@
 import Product from '../models/product.js';
 import Cart from '../models/cart.js';
+import CartItem from '../models/cart-item.js';
 
 
 class ShopController {
@@ -19,46 +20,76 @@ class ShopController {
             const product = await Product.findByPk(productId);
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
-            } 
-                
-            // Add the product to the cart
-                
-            await cart.addProduct(product, { through: { quantity: 1 } });
-                           
-            
-                res.status(200).json({ message: 'Product added to cart successfully' });
-            } catch (err) {
-                console.error('Error adding product to cart:', err);
-                res.status(500).json({ message: 'Failed to add product to cart' });
             }
+
+            // Add the product to the cart  
+            await cart.addProduct(product);
+            const cartItem = await CartItem.findOne({ where: { cartId: cart.id, productId: product.id } });
+
+            // Check if cartItem exist
+            if (!cartItem) {
+                return res.status(404).json({ message: 'Cart item not found' });
+            }
+            // Increment the quantity
+            cartItem.quantity++;
+            await cartItem.save();
+            res.status(200).json({ message: 'Product added to cart successfully' });
+        } catch (err) {
+            console.error('Error adding product to cart:', err);
+            res.status(500).json({ message: 'Failed to add product to cart' });
         }
+    }
 
     // Get all products
     async getAllProducts(req, res) {
-            try {
-                const products = await Product.findAll();
-                res.status(200).json({ products });
-            } catch (err) {
-                console.error('Error fetching products:', err);
-                res.status(500).json({ message: 'Failed to fetch products' });
-            }
+        try {
+            const products = await Product.findAll();
+            res.status(200).json({ products });
+        } catch (err) {
+            console.error('Error fetching products:', err);
+            res.status(500).json({ message: 'Failed to fetch products' });
         }
+    }
 
     // Get cart
     async getCart(req, res) {
-            try {
-                const userId = req.params.userId;
-                const cart = await Cart.findOne({ where: { userId }, include: Product });
+        try {
+            const userId = req.params.userId;
+            const cart = await Cart.findOne({ where: { userId }, include: Product });
 
-                if (!cart) {
-                    return res.status(404).json({ message: 'Cart not found' });
-                }
-                res.status(200).json({ cart });
-            } catch (err) {
-                console.error('Error fetching cart:', err);
-                res.status(500).json({ message: 'Failed to fetch cart' });
+            if (!cart) {
+                return res.status(404).json({ message: 'Cart not found' });
             }
+            res.status(200).json({ cart });
+        } catch (err) {
+            console.error('Error fetching cart:', err);
+            res.status(500).json({ message: 'Failed to fetch cart' });
         }
     }
+
+    //Substract or remove product from cart
+    async removeFromCart(req, res) {
+        try {
+            const cartId = req.params.cartId;
+            const productId = req.params.productId;
+
+            const cartItem = await CartItem.findOne({ where: { cartId, productId } });
+            if (!cartItem) {
+                return res.status(404).json({ message: 'Cart item not found' });
+            }
+            if (cartItem.quantity > 1) {
+                cartItem.quantity--;
+                await cartItem.save();
+                res.status(200).json({ message: 'Product quantity updated successfully' });
+            } else {
+                await cartItem.destroy();
+                res.status(200).json({ message: 'Product removed from cart successfully' });
+            }
+        } catch (err) {
+            console.error('Error removing product from cart:', err);
+
+        }
+    }
+}
 
 export default new ShopController();

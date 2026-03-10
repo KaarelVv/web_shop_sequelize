@@ -12,4 +12,7 @@ router.get('/products', ShopController.getAllProducts);
 // Add product to cart
 router.post('/cart/:userId/add/:productId', ShopController.addToCart);
 
+// Remove from cart
+router.delete('/cart/:cartId/remove/:productId', ShopController.removeFromCart);
+
 export default router;
