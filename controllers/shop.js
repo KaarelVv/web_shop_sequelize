@@ -90,35 +90,34 @@ class ShopController {
             }
         } catch (err) {
             console.error('Error removing product from cart:', err);
-
+            res.status(500).json({ message: 'Failed to remove product from cart' });
         }
     }
 
     // Add new order
     async createOrder(req, res) {
         try {
-            const userId = req.params.userId;
-            const cart = await Cart.findOne({ where: { userId } });
-            const items = await CartItem.findAll({ where: { cartId: cart.id } });
+            const { userId } = req.params;
+            const cart = await Cart.findOne({ where: { userId }, include: Product });
 
-            OrderItems.create({
-                products: items
+            if (!cart) {
+                return res.status(404).json({ message: 'Cart not found' });
+            }
+
+            const totalPrice = cart.Products.reduce(
+                (sum, product) => sum + Number(product.price) * product.CartItem.quantity,
+                0
+            );
+
+            await Order.create({
+                totalPrice,
+                userId
             });
 
-            let totalPrice = 0;
-
-            cart.products.forEach(async (product) => {
-                totalPrice += product.price;
-            });
-
-            Order.create({
-                totalPrice: totalPrice,
-                userId: userId
-            });
             res.status(201).json({ message: 'Order created successfully' });
 
-        }
-        catch (err) {
+            await cart.setProducts([]);
+        } catch (err) {
             console.error('Error adding order:', err);
             res.status(500).json({ message: 'Failed to add order' });
         }
