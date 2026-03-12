@@ -15,4 +15,7 @@ router.post('/cart/:userId/add/:productId', ShopController.addToCart);
 // Remove from cart
 router.delete('/cart/:cartId/remove/:productId', ShopController.removeFromCart);
 
+// Add new order
+router.post('/order/:userId', ShopController.createOrder);
+
 export default router;

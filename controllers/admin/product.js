@@ -9,7 +9,8 @@ class AdminProductController {
                 price: req.body.price,
                 imageUrl: req.body.imageUrl,
                 description: req.body.description,
-                userId: req.body.userId // Assuming the user ID is sent in the request body; in a real app, you'd get this from the authenticated user session
+                userId: req.body.userId // Assuming the user ID is sent in the request body; 
+                // in a real app, you'd get this from the authenticated user session
             });
             res.status(201).json({
                  message: 'Product created successfully', 

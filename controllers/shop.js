@@ -1,6 +1,9 @@
 import Product from '../models/product.js';
 import Cart from '../models/cart.js';
 import CartItem from '../models/cart-item.js';
+import Order from '../models/order.js';
+import OrderItems from '../models/order-items.js';
+
 
 
 class ShopController {
@@ -90,6 +93,41 @@ class ShopController {
 
         }
     }
+
+    // Add new order
+    async createOrder(req, res) {
+        try {
+            const userId = req.params.userId;
+            const cart = await Cart.findOne({ where: { userId } });
+            const items = await CartItem.findAll({ where: { cartId: cart.id } });
+
+            OrderItems.create({
+                products: items
+            });
+
+            let totalPrice = 0;
+
+            cart.products.forEach(async (product) => {
+                totalPrice += product.price;
+            });
+
+            Order.create({
+                totalPrice: totalPrice,
+                userId: userId
+            });
+            res.status(201).json({ message: 'Order created successfully' });
+
+        }
+        catch (err) {
+            console.error('Error adding order:', err);
+            res.status(500).json({ message: 'Failed to add order' });
+        }
+    }
 }
 
+
 export default new ShopController();
+
+
+
+
